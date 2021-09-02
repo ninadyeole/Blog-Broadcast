@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Search Results {% endblock title %}
+
+{% block body %}
+    <div class="container col-md-8">
+        <h3 class="border-bottom">Search Results for "{{query|truncatechars:30}}"</h3>
+    {% if allBlogs|length < 1 %}
+        <h6>No matches found for: {{query|truncatechars:30 }}</h6><br>
+        <h6>Suggestions: </h6>
+        <ul>
+            <li><p>Try using different keywords </p></li>
+            <li><p>Try using fewer keywords </p></li>
+            <li><p>Try using more general keywords </p></li>
+        </ul>
+
+    {% endif %}
+    </div>
+    {% for blog in allBlogs %}
+        <div class="container col-md-8">
+            <div class="my-3 h-100 p-5 text-white bg-dark rounded-3">
+                <h2>{{blog.title}}</h2>
+                <small class="fwt-italic">By {{blog.author}} </small>
+                <p> {{blog.content| truncatechars:400 }} </p>
+                <a href="/blog/{{blog.slug}}" class="btn btn-outline-light" role="button">Go to Blog</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock body %}

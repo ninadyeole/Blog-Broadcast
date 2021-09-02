@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock title %}
+{% block js %}
+    <script>
+        previews = document.getElementsByClassName('preview');
+        Array.from(previews).forEach((element)=>{
+            element.innerHTML=element.innerText;
+        })
+    </script>
+{% endblock js %}
+{% block homeactive %} active {% endblock homeactive %}
+{% block body %}
+
+<main class="container px-2 py-1 my-2">
+    <div class="container p-4 p-md-6 mb-4 my-3 text-white rounded bg-dark">
+        <div class="col-md-10 p-1">
+            <h1 class="display-5  fst-italic border-bottom border-light">Welcome to Blog Broadcast</h1>
+            <p class="lead my-3">Join us and expand your blog's reach by promoting your blogs here!</p>
+            <p class="lead mb-0"><a role="button" href="/blog" class="btn btn-outline-light fw-bold">Trending Blogs</a></p>
+        </div>
+    </div>
+    <hr style="color: white; size: 3px;">
+    <div class="row p-4 p-md-6 mb-4 my-3">
+        <div class="container col-md-8">
+            <div>
+                <h4 class="text-white">Top Blogs</h4>
+            </div>
+            {% for blog in allBlogs %}
+                {% comment %} <div class="container col-md-4">
+                    <div class="card border-dark text-dark bg-primary p-1" style="width: 23rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{blog.title}}</h5>
+                            <small>By {{blog.author}}</small>
+                            <p class="card-text">{{blog.content|truncatechars:30}}</p>
+                            <a href="/blog/{{blog.slug}}" class="btn btn-light">Go To Blog</a>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+                <div class="my-1 p-3 text-light bg-dark rounded-3">
+                    <div class="row">
+                            <div class="col-md-10">
+                          <h2 class="border-bottom border-light">{{blog.title}} </h2>
+                        </div>
+                        <div class="col-md-2">
+                          <span class="badge p-1 text-dark bg-light">({{blog.views}} views)</a></span></div> </div>
+                    <small class="fwt-italic">By {{blog.author.username}} </small>
+                    <div class="preview"> {{blog.content|safe | truncatechars:100 }} </div>
+                    <a href="/blog/{{blog.slug}}" class="btn btn-outline-light" role="button">Go to Blog</a>
+                </div>
+            {% endfor %}
+    </div>
+        <div class="container col-md-4">
+            <br>
+            <div class="my-1 card border-dark text-white bg-dark p-1" style="width: 25rem;">
+                    <div class="card-body">
+                        <h5 class="card-title border-bottom border-light">How to use this Website?</h5>
+                        <small>By Admin</small>
+                        <p class="card-text">This is a guide to using this website.</p>
+                        <a href="/blogTutorial" class="btn btn-dark btn-outline-light">Go To Blog</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+</main>
+{% endblock body %}

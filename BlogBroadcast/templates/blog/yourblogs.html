@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} Blogs {% endblock title %}
+{% block js %}
+    <script>
+        previews = document.getElementsByClassName('preview');
+        Array.from(previews).forEach((element)=>{
+            element.innerHTML=element.innerText;
+        })
+    </script>
+{% endblock js %}
+
+{% block body %}
+    <div class="container col-md-8 my-2">
+        <h3>Trending Posts</h3>
+    </div>
+    {% for blog in allBlogs %}
+        <div class="container col-md-8" style="height: auto;">
+            <div class="my-3 h-100 p-3 text-white bg-dark rounded-3">
+                <div class="row">
+                            <div class="col-md-11">
+                          <h2>{{blog.title}} </h2>
+                        </div>
+                        <div class="col-md-1">
+                          <span class="badge p-1 text-dark bg-light">({{blog.views}} views)</a></span></div> </div>
+                <small class="fwt-italic">By {{blog.author}} </small>
+                <div class="preview"> {{blog.content|safe | truncatechars:400 }} </div>
+                <a href="/blog/{{blog.slug}}" class="btn btn-outline-light" role="button">Go to Blog</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock body %}

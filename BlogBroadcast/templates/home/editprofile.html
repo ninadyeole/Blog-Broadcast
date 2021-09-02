@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Update Profile {% endblock title %}
+
+{% block body %}
+
+<div class="container my-3 col-md-6 p-2" >
+    <h3> Update Your Profile </h3>
+    <form method='POST' action="/updateProfile" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="f_name" class="form-label"><b>First Name</b></label>
+                <input type="text" class="form-control" id="f_name" name="f_name" aria-describedby="name" value="{{user.first_name}}">
+            </div>
+            <div class="col-md-6">
+                <label for="l_name" class="form-label"><b>Last Name</b></label>
+                <input type="text" class="form-control" id="l_name" name="l_name" aria-describedby="name" value="{{user.last_name}}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="username" class="form-label"><b>Username</b></label>
+                <input type="text" class="form-control" id="username" name="username" aria-describedby="name" value="{{user.username}}">
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label"><b>Email</b></label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="name" value="{{user.email}}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="bloglink" class="form-label"><b>Paste the link of your blog</b></label>
+                <input type="text" class="form-control" id="bloglink" name="bloglink"  value="{{userinfo.bloglink}}" >
+            </div>
+            <div class="col-md-6">
+                <label for="location" class="form-label"><b>Location</b></label>
+                <input type="text" class="form-control" id="location" name="location" value="{{userinfo.location}}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="about" class="form-label"><b>Tell us about yourself</b></label>
+            <textarea class="form-control" name="about" id="about" cols="30" rows="4">{{userinfo.about}}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label"><b>Upload an image for your PFP</b></label>
+            <input type="file" class="form-control" name="photo">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock body %}

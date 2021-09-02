@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %} Blog Post {% endblock title %}
+{% load humanize %}
+{% load extras %}
+{% block body %}
+<div class="container col-md-8 bg-light my-2">
+    <div id="overflow-container" class="overflow-container">
+        <div id="main" class="main p-1" role="main">
+            <div id="loop-container" class="loop-container">
+                <div class="post-36 post type-post status-publish format-standard hentry category-uncategorized entry">
+                    <div class="card my-2 ml-0 bg-dark text-white" style="width: auto; border-radius: 5px;">
+                        <div class="card-body m-2 ">
+                        <div class="row">
+                            <div class="col-md-11">
+                          <h2>{{blog.title}} </h2>
+                        </div>
+                        <div class="col-md-1">
+                          <span class="badge p-1 text-dark bg-light">({{blog.views}} views)</a></span></div> </div>
+                          <h5 class="card-subtitle mb-2">By <a class="text-white" href="#">{{blog.author.username}}</a></h5>
+                          <h6 class="card-subtitle mb-2">Published on {{blog.timestamp}}</h6>
+                        </div>
+                      </div>
+                    <div class="entry-content border-bottom m-2">
+                        <article>
+                            <hr>
+                            <p>{{blog.content|safe}}</p>
+                            <hr>
+                            <h3>Support {{blog.author}} by visiting their Blog: <a href="#">Blog</a></h3>
+                            <!-- End of Sample Content -->
+                            </p>
+                        </article>
+                    </div>
+                    <div class="entry-container my-1">
+                        <div class="container">
+                            <h2>Comments ({{comments.count}})</h2>
+                        </div>
+                        <div class="container p-1">
+                            {% if user.is_authenticated %}
+                            <form class="form-inline" method="POST" action="/blog/postComment">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="comment" name="comment"
+                                        placeholder="Write here..">
+                                    <input type="hidden" name="blogSno" value="{{blog.sno}}">
+                                    <input type="hidden" name="parentSno" value="">
+                                    <button type="submit" class="btn btn-dark">Submit</button>
+                                </div>
+                            </form>
+                            {% else %}
+                            <div class="container mx-2">
+                                <b>
+                                    <p>Please Login to post a comment</p>
+                                </b>
+                            </div>
+                            {% endif %}
+                            {% for comment in comments %}
+                            <div class="card mb-2" style="max-width: auto; background-color: rgb(255, 62, 79);">
+                                <div class="row g-0">
+                                    <div class="col-md-1">
+                                        <img src="/static/img/user_default.png"
+                                            class="img-fluid rounded-start d-block w-100 p-1" alt="user image">
+                                    </div>
+                                    <div class="col-md-11">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><span class="badge p-1 bg-dark"><a style="color: rgb(255, 255, 255);" href="#">{{comment.user.username}}</a></span><small class="mx-1 p-1 text-white" style="font-size: small;">{{comment.timestamp|naturaltime}}</small></h5>
+                                            <div class="row border-top border-dark">
+                                            <div class="col-md-10">
+                                                <p class="card-text">
+                                                {{comment.comment}}
+                                                </p>
+                                            </div>
+                                            
+                                                {% if user.is_authenticated %}
+                                                <div class="col-md-2 d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button class="btn btn-dark my-2" type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="replyBox{{comment.sno}}">Reply
+                                                    </button>
+                                                </div>
+                                                <div class="collapse" id="replyBox{{comment.sno}}">
+                                                    <div class="card card-body"
+                                                        style="max-width: auto; background-color: rgb(255, 62, 79);">
+                                                        <form class="form-inline" method="POST"
+                                                            action="/blog/postComment">
+                                                            {% csrf_token %}
+                                                            <div class="mb-3">
+                                                                <input type="text" class="form-control" id="comment"
+                                                                    name="comment" placeholder="Write a reply here..">
+                                                                <input type="hidden" name="parentSno"
+                                                                    value="{{comment.sno}}">
+                                                                <input type="hidden" name="blogSno"
+                                                                    value="{{blog.sno}}">
+                                                                <button type="submit"
+                                                                    class="btn btn-dark">Submit</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                {% else %}
+                                                <div class="col-md-10 d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="replyBox{{comment.sno}}" disabled>Login to Reply
+                                                    </button>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for reply in replyDict|get_val:comment.sno %}
+                            <div class="row m-2 mx-0">
+                                <div class="col-md-1 bg-light">
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="card mb-2" style="max-width: auto; background-color: rgb(255, 60, 79);">
+                                        <div class="row g-0">
+                                            <div class="col-md-1">
+                                                <img src="/static/img/user_default.png" class="img-fluid rounded-start d-block w-100 p-1" alt="User Image">
+                                            </div>
+                                            <div class="col-md-11">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><span class="badge p-1 bg-dark"><a style="color: rgb(255, 255, 255);" href="#">{{reply.user.username}}</a></span>
+                                                        <small class="p-1 text-white" style="font-size: small;">{{reply.timestamp|naturaltime}}</small>
+                                                    </h5>
+                                                <p class="card-text">{{reply.comment}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .main -->
+    </div>
+</div>
+{% endblock body %}

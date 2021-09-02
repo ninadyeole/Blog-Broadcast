@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} Your Comments {% endblock title %}
+{% load humanize %}
+{% load extras %}
+{% block js %}
+<script>
+    previews = document.getElementsByClassName('preview');
+    Array.from(previews).forEach((element) => {
+        element.innerHTML = element.innerText;
+    })
+</script>
+{% endblock js %}
+
+{% block body %}
+<div class="container col-md-7">
+    {% for comment in comments %}
+    <div class="card my-3" style="max-width: auto; background-color: rgb(255, 62, 79);">
+        <div class="card-body">
+            <h5 class="card-title"><span class="badge p-1 bg-dark"><a style="color: rgb(255, 255, 255);"
+                        href="#">{{comment.user.username}}</a></span><small class="mx-1 p-1 text-white"
+                    style="font-size: small;">{{comment.timestamp|naturaltime}}</small></h5>
+            <div class="row border-top border-dark">
+                <div class="col-md-10">
+                    <p class="card-text">
+                        {{comment.comment}}
+                    </p>
+                </div>
+            </div>
+            <a href="/blog/{{comment.blog.slug}}" class="btn btn-outline-dark my-2">Go To Blog</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock body %}
